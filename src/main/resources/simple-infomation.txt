@@ -1,0 +1,17 @@
+thanks for buying UltimateUHC
+here some simple infomation of the plugin
+
+backpack multi languages title will only works on the player's version higher then 1.8! (if the player's version is lower then 1.8 (ex. 1.7) , then the inventory title will be default language title only)
+
+the plugin supported PlaceholderAPI
+
+how do i update to version 1.0C ?:
+  language.yml:
+    added <backpack-title: '§6§l<teamName>§f§ls'' backpack'>
+    added <schenarios.is-disable: '&cScenario &e<scenario> &cis currently disabled.'>
+
+i'll help you to setup everything you need
+but remember , im pretty LASY , so don't retard when i ignore you please XD
+
+my contact infomation here:
+Discord: LeeGod#9863

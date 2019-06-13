@@ -1,0 +1,162 @@
+#Items:
+#  <ItemName>:
+#    Enable: <enable>
+#    Slot: <slot>
+#    Material: <material>
+#    ItemData: <data>
+#    Amount: <amount>
+#    Mode: <Mode value>
+#    Name: <Name>
+#    Lore:
+#    - <lores>
+#    Commands:
+#    - <commands to execute>
+#
+# mode value contains (Mode: <mode>):
+# - Player
+# - PlayerOnly
+# - Spec
+# - SpecOnly
+# - Staff
+# - StaffOnly
+# - Hoster
+Lobby:
+  Configuration:
+    Enable: true
+    Slot: 0
+    Material: BOOK
+    ItemData: 0
+    Amount: 1
+    Name: '&7> &b&lConfig &7<'
+    Lore:
+    - '&7Click me to see config ingame!'
+    Commands:
+    - 'config'
+  Practice:
+    Enable: true
+    Slot: 1
+    Material: IRON_SWORD
+    ItemData: 0
+    Amount: 1
+    Name: '&7> &e&lPractice &7<'
+    Lore:
+    - '&7Click me to join practice'
+    Commands:
+    - 'practice'
+  Hoster-Config:
+    Enable: true
+    Slot: 8
+    Material: NETHER_STAR
+    ItemData: 0
+    Amount: 1
+    Mode: Hoster
+    Name: '&7> &b&lHoster Config &7<'
+    Lore:
+    - '&7Click me to configure this uhc!'
+    Commands:
+    - 'uhc editor'
+  BEACON:
+    Enable: true
+    Slot: 7
+    Material: BEACON
+    ItemData: 0
+    Amount: 1
+    Mode: Hoster
+    Name: '&7> &e&lWorld Config &7<'
+    Lore:
+    - '&7Click me to configure this uhc!'
+    Commands:
+    - 'pregame'
+  Example-1:
+    Enable: false
+    Slot: 2
+    Material: PAPER
+    ItemData: 0
+    Amount: 2
+    Mode: StaffOnly
+    Name: '&eCustom-Item!'
+    Lore:
+    - '&7Custom-Items!'
+    Commands:
+    - 'custom-1'
+Spectator:
+  centerTP:
+    Enable: true
+    Slot: 4
+    Material: DIAMOND_SWORD
+    Name: '&6Center&f Teleport'
+    Lore:
+    - '&7Click me teleport to center'
+    Commands:
+    - TpCenter
+  RandomTP:
+    Enable: true
+    Slot: 0
+    Material: SKULL_ITEM
+    Name: '&6Random&f Teleport'
+    Lore:
+    - '&7Click to teleport a random player'
+    Commands:
+    - RandomTP
+  AliveMenu:
+    Enable: true
+    Slot: 1
+    Material: ITEM_FRAME
+    Name: '&6AlivePlayer&f Menu'
+    Lore:
+    - '&7Click to open alive player menu'
+    Commands:
+    - AliveMenu
+  SpecMenu:
+    Enable: true
+    Slot: 8
+    Material: BOOK
+    Name: '&6Spectator&f Menu'
+    Mode: SpecOnly
+    Lore:
+    - '&7Click to open spectator options menu'
+    Commands:
+    - SpecMenu
+  PostWinner:
+    Enable: true
+    Slot: 6
+    Material: ENCHANTED_BOOK
+    Name: '&e&lPost winner'
+    Mode: Hoster-Staff
+    AfterGameEnd: true
+    Lore:
+      - '&7Click me to announce winners'
+    Commands:
+      - postwinner
+  StaffMenu:
+    Enable: true
+    Slot: 8
+    Material: ENCHANTED_BOOK
+    Name: '&6Staff&f Menu'
+    Mode: Staff
+    Lore:
+    - '&7Click to open staff options menu'
+    Commands:
+    - StaffMenu
+  Vanish:
+    Enable: true
+    Slot: 5
+    Material: EYE_OF_ENDER
+    Name: '&6Vanish&f Mode'
+    Mode: Staff
+    Lore:
+    - '&7Click me to enable or disable vanish!'
+    Commands:
+    - Vanish
+  NetherMenu:
+    Enable: true
+    Slot: 2
+    Material: NETHERRACK
+    Name: '&6NetherPlayer&f Menu'
+    Mode: Staff
+    Lore:
+    - '&7Click me to open alive player menu in nether!!'
+    Commands:
+    - NetherMenu
+    
+    

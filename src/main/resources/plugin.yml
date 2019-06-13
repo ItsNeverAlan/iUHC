@@ -1,0 +1,7 @@
+name: UHC
+version: ${project.version}
+main: ${mainClass}
+author: ${author}
+description: High quality ultra hardcore plugin
+depend: [Mitw]
+softdepend: [FastAsyncWorldEdit]

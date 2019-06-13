@@ -1,0 +1,448 @@
+EN_US:
+  displayName: '&b&lEnglish'
+  prefix: '&b&lUltimate&f&lUHC&7 &8&l> &f'
+  game-prefix: '&b&lGame &8&l> &f'
+  border-prefix: '&e&lBorder &8&l> &f'
+  combat-prefix: '&c&lCombat &8&l> &f'
+  join-messages:
+  - '&8&m-----------------------------'
+  - ' '
+  - '&7Welcome to &b&lUltimate&f&lUHC &7[1.0]'
+  - ' '
+  - '&fDeveloper: &b@LeeGod'
+  - ' '
+  - '&8&m-----------------------------'
+  eloChanged-Death: '&eElo Changed: <elo> &c<eloChanged> &7(Death)'
+  eloChanged-Kill: '&eElo Changed: <elo> &a<eloChanged> &7(Kill)'
+  eloChanged-Win: '&eElo Changed: <elo> &a<eloChanged> &7(&e&lWin&7)'
+  noPermission: '&cYou have no permission to do this command'
+  PingCMD: '&7[&bPing&7]&f Your Ping is &b<ping>ms &f!'
+  PingCMD-Other: '&7[&bPing&7]&a <player>''s &fPing is &b<ping>ms &f!'
+  PingCMD-Usage: '&cUsage: /ping <target player>'
+  PingCMD-CantFindTarget: '&cTarget is not online!'
+  UseBlockedCMD: '&cYou can not use this command because is blocked!'
+  NotStarted: '&cThe game haven''t started!'
+  Started: '&cThe game is started already! you can''t use this command now!'
+  IsSpectator: '&cYou can not use this command by being a viewer'
+  stillAlive: '&cyou are still alive!'
+  ChoosedLanguage: '&eYou choosed <language>&e language!'
+  DeathMessages:
+    KILLED: '&c<Player>&8[&f<PlayerKills>&8]&e has slain by &c<Killer>&8[&f<KillerKills>&8].'
+    SHOT: '&c<Player>&8[&f<PlayerKills>&8]&e was shot to death by &c<Killer>&8[&f<KillerKills>&8].'
+    ZOMBIE: '&c<Player>&8[&f<PlayerKills>&8]&e was slain by &cZombie&8[&f1&8].'
+    SKELETON: '&c<Player>&8[&f<PlayerKills>&8]&e was slain by &cSkeleton&8[&f1&8].'
+    CREEPER: '&c<Player>&8[&f<PlayerKills>&8]&e was slain by &cCreeper&8[&f1&8].'
+    SPIDER: '&c<Player>&8[&f<PlayerKills>&8]&e was slain by &cSpider&8[&f1&8].'
+    FALL: '&c<Player>&8[&f<PlayerKills>&8]&e was death by falling.'
+    LAVA: '&c<Player>&8[&f<PlayerKills>&8]&e he died trying to swim in lava.'
+    EXPLOSION: '&c<Player>&8[&f<PlayerKills>&8]&e he died by an explosion.'
+    DISCONNECT: '&c<Player>&8[&f<PlayerKills>&8]&e disconnect too long.'
+    UNKOWN: '&c<Player>&8[&f<PlayerKills>&8]&e has died.'
+  DeathKick:
+    KickBroadcast: '&c<Player> &7has been kicked for DeathKick'
+    KickMessage: '&bThanks for playing this UHC &7, &eSee you next time!'
+  BowHealth: '&c<Player>&7 is now&c<PlayerHealth><HeartIcon> &e<PlayerAbsorptionHealth><HeartIcon>'
+  ReachBorder: '&cYou reach limit of worldborder...'
+  Cooldown: '&cDont spamming! please wait sometimes!'
+  TimeFormat:
+    Second: second
+    Seconds: seconds
+    Minute: minute
+    Minutes: minutes
+  WinnerMessage-SOLO:
+  - '&7&m----------------------------------'
+  - ' '
+  - '&fThe Winner is &b&l<player> &f!'
+  - ' '
+  - '&fList Player Killed:'
+  - '&c<ListKilled>'
+  - ' '
+  - '&a&lThanks for playing!'
+  - '&a&lRemember to thanks the hoster!'
+  - ' '
+  - '&7&m----------------------------------'
+  WinnerMessage-TEAM:
+  - '&7&m----------------------------------'
+  - ' '
+  - '&fThe Winner Team is &b&l<TeamName> &f!'
+  - ' '
+  - '&fTeam Members List:'
+  - '&e&l<TeamMembers>'
+  - ' '
+  - '&a&lThanks for playing!'
+  - '&a&lRemember to thanks the hoster!'
+  - ' '
+  - '&7&m----------------------------------'
+  PlayerSnapshot: '&fWinner Snapshots: &6'
+  Border:
+    Countdown: 'The border will be reduced by &e<timer> <timerFormat>'
+    Shrinked: 'The border has been reduced to &e<size>x<size>'
+    Nether-Warning: '&cThis border shrink will teleport you from nether to overworld!'
+    Nether-Teleport: '&aYou have been random teleport to overworld , good luck!'
+  Chat:
+    Chat-Enable: '&a&lThe chat has been activated, you can now send messages!'
+    Chat-Disable: '&c&lChat has been disabled, you can not send messages now!'
+    is-Disable: '&cThe Chat is disabled, you can not send any message on public chat!'
+    Anti-Spam: '&cSTOP SPAM! Please wait <time> seconds for send other message.'
+  KillCount:
+    TargetNotOnline: '&cPlayer is not online!'
+    NoKills: '&cThat player does not have any kill'
+    CMDMessage:
+    - '&e<player> &fhas &a<killCount> &fkills.'
+    - '&bList: &a<listKilled>'
+  Health:
+    NotStarted: '&cUHC has not started, you can not use this command!'
+    TargetNotOnline: '&cPlayer is not online!'
+    PlayerHealth: '&fYour health at now &c<health><heart>'
+    OtherHealth: '&f<name> health at now &c<health><heart>'
+  CombatTag:
+    NoLongerCombat: '&cYour combat tag has been unset'
+    InCombat: '&ayour combat tag has been set'
+  Practice:
+    Join: '&7[&6PRACTICE&7]: &aYou joined to &fPractice&a.'
+    isDisable: '&7[&6PRACTICE&7]: &cYou can not join to practice because is disable!.'
+    KilledMessage: '&7[&6PRACTICE&7]: &c<player> &7killed by &a<killer>'
+  Nether:
+    NotEnabled: '&eNether &cis disable!'
+    GoNetherBlocked: '&cYou can only go to nether before the border is 500x500!'
+  Staff:
+    SetStaff:
+    - '&7&m---------------------'
+    - '&7 '
+    - '&fYou are now &e&lUHC-Staff'
+    - '&fDo your best to &b&Lcatch hackers!'
+    - '&6 '
+    - '&7&m---------------------'
+    SetHost:
+    - '&7&m---------------------'
+    - '&e '
+    - '&fYou are now &6&lUHC-HOST'
+    - '&fDo your best to &b&lHost a Good Game!'
+    - '&2 '
+    - '&7&m---------------------'
+  Freeze:
+    FrozenPlayer:
+    - '&7&m---------&r&4&l[&c&lWARNING&4&l]&7&m---------'
+    - ' '
+    - '&f&lHey Player.'
+    - '&f&lYou got &c&lfreeze &f&lby &c&lStaff <staff>'
+    - '  '
+    - '&f&lPlease &c&lcooperate &f&lwith the '
+    - '&6&lStaff &f&lto do &c&lany action&f&l !'
+    - '  '
+    - '&f&lIf you dont'
+    - '&4&lYou''ll got banned for that'
+    - '   '
+    - '&7&m---------&r&4&l[&c&lWARNING&4&l]&7&m---------'
+    UnFrozenPlayer:
+    - '&7&m---------&r&2&l[&a&lFINISH&2&l]&7&m---------'
+    - ' '
+    - '&f&lHey Player!'
+    - '&f&lYou got &a&lunFreeze &f&by &a&lStaff <staff> &f&l!'
+    - ' '
+    - '&f&lSorry for &a&lours Staff misunderstood you &f&l!'
+    - '&f&lNow you can play the &a&lUHC &f&l!'
+    - '  '
+    - '&a&lGood Luck!'
+    - ' '
+    - '&7&m---------&r&2&l[&a&lFINISH&2&l]&7&m---------'
+    Notify-Disconnect-onFreeze: '&7[&b&lStaff&7] &fPlayer &a&l<player>&f has quit
+      when he is frozen!'
+    ClickMe-ToBan: '&7&l&m>>&r &eClick me to ban the player <player>'
+    ClickMe-ToBan-ShowText: '&6&lClick me to ban the player <player>'
+    Notify-Frozen-aPlayer: ''
+    Hit-FreezePlayer: ''
+  Scatter:
+    Start:
+    - '&7&m----------------------------------'
+    - '&6 '
+    - '&e&l     Scatter Start!'
+    - '&f  Please Wait 1 - 2 mins for &eteleporting &f!'
+    - '&6 '
+    - '&7&m----------------------------------'
+    Finish:
+    - '&7&m----------------------------------'
+    - '&e '
+    - '&6&l    Scatter Finished!'
+    - '&f  The Chat Will be Enabled if &eStaff &fWant!'
+    - '&6 '
+    - '&7&m----------------------------------'
+  Timer-CountDown:
+    LobbyTimer: 'The UHC will begin in &b&l<timer> <timerFormat>'
+    StartTimer: 'The UHC starts in &b&l<timer> <timerFormat>'
+    FinalHeal: 'The FinalHeal will be activated in &b&l<timer> <timerFormat>'
+    PvPTimer: 'The PVP will be activated in &b&l<timer> <timerFormat>'
+    DeathMatchTimer: 'The DeathMatch will start in &b&l<timer> <timerFormat>'
+  Respawn: You has been respawned!
+  AutoRespawn:
+  - '&7&m-------------------------'
+  - '&fThe player &e<player> &fhas been banned!'
+  - ' '
+  - '&6all players killed by this player will been auto respawned!'
+  - '&7&m-------------------------'
+  SavedStats: '&eSSuccessfully saved stats to database!'
+  LeaveTooLong: '&cYou Quited Game more then 10 minutes, you are no longer alive in this game!'
+  BroadCast:
+    PvPEnabled: '&b&lPVP has been activated, GOOD LUCK!'
+    FinalHeal: '&cYou have been regenerated by &eFinal Heal&c, You will not be regenerated
+      from now on!'
+    FirstHeal: '&a&lYou have been regenerated by &e&lFirst Heal &a&l!'
+    GameStarted: '&b&lThe UHC game has started, we wish you all luck in the world.
+      May the best player win!'
+    DeathMatch: '&c&lDeathMatch has started! Good Luck Final 4 players!'
+  bossbar:
+    finalheal: '&f&lFinalHeal: &6&l'
+    pvp: '&f&lPvP: &6&l'
+    border: '&f&lBorder Shrink: &6&l'
+    winner: '&e&lWinner(s): &6&l'
+  Team:
+    TeamHelp:
+    - '&7&m----------------------------------'
+    - '&6&lCommands team mode:'
+    - ' &e&l1(&6 /team create &7To create a team!'
+    - ' &e&l2(&6 /team solo &7To create a solo team!'
+    - ' &e&l3(&6 /team list <player> To list a player''s team!'
+    - ' &e&l4(&6 /team name &7To edit name of your team!'
+    - ' &e&l5(&6 /team invite <player> &7To Invite a player to your team!'
+    - ' &e&l6(&6 /team deny &7To deny an invite!'
+    - ' &e&l7(&6 /team leave &7To leave current team!'
+    - ' &e&l8(&6 /team kick <player> &7To kick a player from your team!'
+    - '&7&m----------------------------------'
+    TeamList:
+    - '&7&m----------------------------------'
+    - '&fteamName: &a<teamName>'
+    - '&fLeader: &6<leader>'
+    - '&fMembers:'
+    - '&e<member>'
+    - '&7&m----------------------------------'
+    OnInvite:
+      CantInviteSelf: '&cYou can''t invite yourself to team!'
+      onPlayerDeny: '&cYou have denied the team invite!'
+      PlayerDeny: '&c<player> denied the team invite!'
+      InviteReceiveMessage:
+      - ' '
+      - '&aYou received an invitation to the team: &e<teamName>'
+      - '&aMembers on the team: &b<teamMembers>'
+      - ' '
+      SendInvite: '&f<teamOwner> &ainvited &e<player> &ato the team.'
+      AcceptJson: '&e> Or click me to &aAccept&e! <'
+      AcceptJson-ShowText: '&eclick me to &aAccept&e!'
+      PlayerHaveTeam: '&cThat player is already on a team!'
+      PlayerInvited: '&cThat player has already received an invitation to a team!'
+      On-InviteTimeOut: '&cYour request from <teamName> &c(<teamOwner>) timed out!'
+      InviteTimeOut: '&cTeam invite to <player> timed out!'
+    IsDisable: '&cTeam mode is disable, can''t use this command!'
+    NotInTeam: '&cYou are not in a team!'
+    TargetNotInTeam: '&c<target> are not in a team!'
+    AlreadyInTeam: '&cYou are already in a team, use /team leave to leave your current team!'
+    OnlyTeamLeader: '&cYou must be the team leader to invite players to the team!'
+    JoinTeam: '&6<player>&e joined your team!'
+    QuitTeam: '&6<player>&c quited your team!'
+    TeamChat:
+      Enabled: '&aYou toggled to team chat!'
+      Disabled: '&cYou toggled to public chat!'
+      AutoDisabled: '&cTeam chat mode was auto disband! You are not inside any team!'
+  MLG:
+    accepted: '&fYou accepted MLG! &b&lGL HF!'
+    broadcast: '&e&l<player>&f accepted MLG! &a&lWOOO!'
+    countdown: '&fMLG going to start in <time> second(s)!'
+    survival: '&e&l<player>&f has win the MLG! &a&lGOD!!'
+  CantDoBeforePvP: '&cYou cant do this before pvp!'
+  HealCMD:
+    HealAll:
+    - '&f '
+    - '&eAll players has been healed by Staff!'
+    - '&f '
+    HealTarget:
+    - '&f '
+    - '&eYou has been healed by Staff!'
+    - '&f '
+  Rules:
+    UsedCmd:
+    - ' '
+    - '&c/rules <page>'
+    - ' '
+    - '&fTo read UHC rules, use the &c/rules <page>&f.'
+    - '&c&lRead all rules before playing this match!'
+    - ' '
+    UnknownPages: "&cdoesnt have this papge!"
+    Page1:
+    - '&9rules here ;D'
+  GiveAll:
+    NotStarted: '&cUHC has not started, you can not use this command!'
+    Gived: '&fAll players have received &e<quantity> &ffrom &e<item>&f.'
+  Kick-AFK: '&cYou got kicked by AFK Blocker!'
+  NoScenarios: '&cthere have no scenarios are enabled!'
+  Timebomb:
+    Exploded: '&7[&cTimebomb&7]&f <player>''s death chest has exploded'
+    Holograms: '&6<time>s'
+  Radar:
+    '250': '&7[&6&lRadar&7]&f A player is nearing you &8(&7distance:&a&l In250&8)'
+    '200': '&7[&6&lRadar&7]&f A player is nearing you &8(&7distance:&e&l In200&8)'
+    '150': '&7[&6&lRadar&7]&f A player is nearing you &8(&7distance:&e&l In150&8)'
+    '100': '&7[&6&lRadar&7]&f A player is nearing you &8(&7distance:&c&l In100&8)'
+    '50': '&7[&6&lRadar&7]&f A player is nearing you &8(&7distance:&c&l In50&8)'
+  NoClean:
+    Started: '&a[No Clean] You have a 20 second invincibility timer!'
+    Stoped: '&c[No Clean] You are no longer have invincibility!'
+  NoCleanPlus:
+    Started: '&c[NoClean&e+&c] You are now fighting with <player> ! no one can clean you two now!'
+    OnTryToClean: '&c[NoClean&e+&c] they are fighting! dont try to clean!'
+    NoOpponent: '&c[NoClean&e+&c] you already have no opponent!'
+    Stopped: '&c[NoClean&e+&c] You have no opponent now! find a new opponent for fighting!'
+  ExtraInventory:
+    Open-ExtraInventory: '&eOpening extra inventory.'
+  SuperHero-Receive: '&aSuperHero Scenario! you reveive <effect> effect!'
+  LoveAtFirstSight:
+    CantDoThis: '&7[&d&lLAFS&7] &cThe scenario &eLove at first sight&c is on! you can not edit the teams!'
+    TeammateSet: '&7[&d&lLAFS&7] &aThe player <player> is now your teammate!'
+    Invited: '&7[&d&lLAFS&7] &aYou have invited <player> to team with you!'
+    WantToTeam: '&7[&d&lLAFS&7] &ePlayer &f<player>&e want to team with you! &csneak and hit him without items to accept!'
+  SuperHeroList:
+    FIRE_RESISTANCE: 'FIRE_RESISTANCE'
+    ABSORPTION: 'ABSORPTION'
+    INVISIBILITY: 'INVISIBILITY'
+    FAST_DIGGING: 'FAST_DIGGING'
+    SLOW_DIGGING: 'SLOW_DIGGING'
+    JUMP: 'JUMP'
+    WATER_BREATHING: 'WATER_BREATHING'
+    NIGHT_VISION: 'NIGHT_VISION'
+    SPEED: 'SPEED'
+    INCREASE_DAMAGE: 'INCREASE_DAMAGE'
+    SATURATION: 'SATURATION'
+    REGENERATION: 'REGENERATION'
+  backpack-title: '§6§l<teamName>§f§ls'' backpack'
+  scenarios:
+    prefix: '&7[&6Scenarios&7]&f '
+    enabled: '&eScenario &6&l<scenario> &ehas been enabled!'
+    disband: '&cScenario &6&l<scenario> &chas been disband!'
+    is-disable: '&cScenario &e<scenario> &cis currently disabled.'
+    description:
+      Timber:
+      - ' '
+      - '&7description'
+      - ' '
+      CutClean:
+      - ' '
+      - '&7description'
+      - ' '
+      DiamondLess:
+      - ' '
+      - '&7description'
+      - ' '
+      GoldLess:
+      - ' '
+      - '&7description'
+      - ' '
+      bloodDiamonds:
+      - ' '
+      - '&7description'
+      - ' '
+      bloodGold:
+      - ' '
+      - '&7description'
+      - ' '
+      BowLess:
+      - ' '
+      - '&7description'
+      - ' '
+      VanillaPlus:
+      - ' '
+      - '&7description'
+      - ' '
+      HorseLess:
+      - ' '
+      - '&7description'
+      - ' '
+      TimeBomb:
+      - ' '
+      - '&7description'
+      - ' '
+      NoFallDamage:
+      - ' '
+      - '&7description'
+      - ' '
+      FireLess:
+      - ' '
+      - '&7description'
+      - ' '
+      NoClean:
+      - ' '
+      - '&7description'
+      - ' '
+      DoubleOres:
+      - ' '
+      - '&7description'
+      - ' '
+      AbsorptionLess:
+      - ' '
+      - '&7description'
+      - ' '
+      RodLess:
+      - ' '
+      - '&7description'
+      - ' '
+      LuckyKill:
+      - ' '
+      - '&7description'
+      - ' '
+      LuckyLeaves:
+      - ' '
+      - '&7description'
+      - ' '
+      ExtraInventory:
+      - ' '
+      - '&7description'
+      - ' '
+      NoEnchants:
+      - ' '
+      - '&7description'
+      - ' '
+      Barebones:
+      - ' '
+      - '&7description'
+      - ' '
+      WebCage:
+      - ' '
+      - '&7description'
+      - ' '
+      Soup:
+      - ' '
+      - '&7description'
+      - ' '
+      TripleOres:
+      - ' '
+      - '&7description'
+      - ' '
+      Radar:
+      - ' '
+      - '&7description'
+      - ' '
+      VeinMiners:
+      - ' '
+      - '&7description'
+      - ' '
+      SuperHeroes:
+      - ' '
+      - '&7description'
+      - ' '
+      NoCleanPlus:
+      - ' '
+      - '&7description'
+      - ' '
+      StatLess:
+      - ' '
+      - '&7description'
+      - ' '
+      InfiniteEnchanter:
+      - ' '
+      - '&7description'
+      - ' '
+      FlowerPower:
+      - ' '
+      - '&7description'
+      - ' '
+      LoveAtFirstSight:
+      - ' '
+      - '&7description'
+      - ' '

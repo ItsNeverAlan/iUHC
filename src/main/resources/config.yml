@@ -1,0 +1,419 @@
+#
+#
+#                          * iUHC *
+#
+#    a Premium Resource with Spigot
+#
+#                            Best UHC Plugin on Spigot!
+#
+#										  			    COPYRIGHT ©
+#
+#
+#  Thanks you for purchasing iUHC !
+#
+#						 If you want report bugs or give me some suggestion
+#     				       		 You can PM me on Discord or Spigot!
+#
+#
+#                        ENJOY THE PLUGIN!
+#
+
+# HWID -> your lincese key, please enter your hwid to here!
+#         or the plugin will not able to start up!
+#--- ITS IMPORTANT---
+HWID: ENTER_YOUR_HWID_HERE
+
+#DONT TOUCH THIS
+version: 1.0-D-SNAPSHOT
+
+# Select the default language inside language.yml !
+Language: EN_US
+
+color:
+  normal: '&f'
+  important: '&6'
+  a_bit_important: '&e'
+
+MySQL:
+  enabled: false
+  host: 127.0.0.1
+  port: 3306
+  database: uhcData
+  username: root
+  password: 123
+
+iPvP-Protactor: true
+fps-booster: false
+default-location-generates: 300
+
+bungee:
+  hubNames:
+  - UHCLOBBY1
+
+# THIS OPTION WILL DISBAND SOME FEATURES!
+performance-mode: false
+
+# THIS OPTION WILL MAKE THE CPU USAGE DOWN A BIT
+# BUT IT WILL CAUSE TPS LOWER (less async)
+less-cpu-usage: false
+
+# its might not be used in normal matches
+# but it will be called when ingame world creating or something like that
+lag-broadcast: true
+
+gameConfig:
+  interact-cooldown: 1
+  playerLimit: 300
+  tasks:
+    lobbyTimer: 30
+    releaseTimer: 10
+    pvpTimer: 1200
+    deathmatchTimer: 3300
+
+#Minecraft 1.8+ WorldBorder show with bedrock border
+#DOSENT WORKING WITH 1.7
+WorldBorderEnabled: false
+
+Lobby:
+  HideAllPlayer: false
+
+PracticeEnabled: false
+
+restart-onmatch-ended: false
+
+Unlimit-Scatter-Times: false
+
+OldEnchant:
+  Enabled: false
+
+DeathMatch:
+
+  Enabled: true
+
+  #When Player left is the number
+  StartIn: 6
+
+  CountDown: 600 #Seconds
+
+  #ArenaType means The world type of arena
+  #List Of ArenaType:
+  #- FLAT #Auto create Flat World for DeathMatch
+  #- NORMAL #DeathMatch arena in the same world
+  #- CUSTOM #Custom arena world by your self! 
+  #         YOU NEEDED TO PUT THE WORLD FILE NAMED "UHCArena_deathmatch" into world files if you uses this option!
+  #!! ONLY FLAT FOR NOW !!#
+  ArenaType: FLAT
+
+  Border:
+
+    Size: 15
+
+    #Bedrock border like what you see in arena world
+    Bedrock: true
+
+    #1.8Border in the arena !!Only work on 1.8+!!
+    WorldBorder: false
+
+#Disable it if you have Proxy lost connection problem!
+Sit-On-Scatter: true
+
+# Size Factor recommend to use 2 ~ 5 (80 ~ 200)
+# Use it with Terrain Control should be faster on load!
+CenterClear:
+  Enabled: true
+  Checker:
+    WaterCountLimited: 8000
+    TreeCountLimited: 250
+    DisAllowedBiomeLimited: 14000
+    MaxHigherOfCenter: 75
+    RiverCheckEnabled: true
+    RiverCheckIn: 50
+  MandatoryChanger:
+    #DONT OPEN IT WITH TERRAIN CONTROL
+    Enabled: false
+    Size-Factor: 3
+
+Chunk:
+  LoadEnabled: true
+  LoadPadding: 208
+  LoadFrequency: 200
+  FinishRestart: true
+  LowMemoryRestart: true
+  RestartCMD: restart
+
+Border:
+  Default: 1500
+  Knockback: 5.0
+  NetherDefault: 500
+  BorderList:
+  - 3000
+  - 2000
+  - 1500
+  - 1000
+  - 500
+  - 100
+  - 50
+  - 25
+  BorderTPNether: 500
+
+  defaultStyle: default
+  #Border Style
+  Style:
+    default:
+      #Real Block , default is bedrock border
+      RealBlock:
+        Material: BEDROCK
+        DATA: 0
+      #visual block , default is red glass barrier
+      VisualBlock:
+        Material: STAINED_GLASS
+        DATA: 14
+
+#its for custom spigots that avoid async catcher!
+Avoid-async-catcher: false
+
+motd:
+  InSetup: '&aConfiguring'
+  Lobby-Whitelisted: '&bWHITELISTED'
+  Lobby-NoWhitelist: '&2&lWAITING PLAYERS'
+  Starting-Game: '&6&lSTARTING GAME'
+  InGame: '&4&lIN-GAME'
+  Finished-MLG: '&9&lFINISH GAME...'
+
+onLogin-Blocked:
+  ChunkLoading: '&cThe world is loading, please wait'
+  FullGame: '&cthis game is full!'
+  Whitelist: '&bthis game has been whitelisted'
+  InGame: '&cis ingame , please dont be late!'
+  Finish: '&athis game has ended!'
+
+# Display style of health in tab!
+# Type 'dummy' for numeric style
+# Type 'health' for heart style
+# DO NOT PUT ANYTHING ELSE!
+TabHealth:
+  Enabled: true
+  Type: dummy
+
+whitelist:
+- LeeGod
+- xItzChchee_cw
+
+startCommands:
+- broadRules
+
+BroadRules:
+  EverySecond: 5
+  RuleList:
+  - '&7[&6Rule #1&7] &frule #1'
+  - '&7[&6Rule #2&7] &frule #2'
+
+Twitter:
+  Enabled: false
+  Auth-consumer_key: Auth-consumer_key
+  Auth-consumer_secret: Auth-consumer_secret
+  Auth-accesstoken: Auth-accesstoke
+  Auth-accesstoken_secret: Auth-accesstoken_secret
+  UHC-Announce:
+  - 'iUHC UHC Game'
+  - ' '
+  - '<mode> <scenarios>'
+  - 'Opens: GMT+8 <whitelistOffTimes>'
+  - 'IP: mitw.rip'
+  - 'Slots: 300'
+  Solo-Winner-Announce:
+  - 'Server IP: Mitw.Rip'
+  - ' '
+  - 'iUHC UHC Game'
+  - ' '
+  - '<mode> winner:'
+  - '- <winner>'
+  - ' '
+  - 'IP: mitw.rip'
+  Team-Winner-Announce:
+  - 'Server IP: Mitw.Rip'
+  - ' '
+  - 'iUHC UHC Game'
+  - ' '
+  - '<mode> winner team:'
+  - '  <winnerTeam>:'
+  - '  - <ListTeamMember>'
+  - ' '
+  - 'IP: mitw.rip'
+Discord:
+  Enabled: false
+  TokenBot: Token
+  ChannelID: ChannelID
+  Embed-Title: 'UHC AbstractAnnounce'
+  Embed-Author: 'iUHC'
+  Tag: '@everyone'
+  UHC-Announce:
+  - '----------------------------------------'
+  - ' '
+  - 'EnglishVersion:'
+  - '1) Whilelist OFF: GMT+8 <whitelistOffTimes>'
+  - '2) Start time: GMT+8 <startTimes>'
+  - '3) Host: <hoster>'
+  - '4) GameType: <mode>'
+  - '5) Scenarios:'
+  - '<scenarios>'
+  - ' '
+  - '6) Nether: <nether>'
+  - '7) Apple rate: <applerate>%'
+  - '8) Speed: <speed>'
+  - '9) Strength: <strength>'
+  - ' '
+  - '10) World settings:'
+  - '- Border radius: <border>'
+  - '- First border: <firstborder>'
+  - '- Final heal: <finalheal>'
+  - '- PvP On: <pvp>'
+  - ' '
+  - ----------------------------------------
+  - 
+  - Server IP: Mitw.Rip
+  - 
+  - Use /scenarios to check scenarios in game!
+  - 
+  Solo-Winner-Announce:
+  - '----------------------------------------'
+  - ' '
+  - The Game of <mode> has ended!
+  - ' '
+  - The Winner is <winner> !!
+  - Congratulations for winning!
+  - ' '
+  - 'List Winner Killed:'
+  - <ListKilled>
+  - ' '
+  - The Hoster is <hoster>
+  - Remember to thanks the hoster!
+  - ' '
+  - '----------------------------------------'
+  - ' '
+  - 'Server IP: Mitw.Rip'
+  - ' '
+  Team-Winner-Announce:
+  - '----------------------------------------'
+  - ' '
+  - The Game of <mode> has ended!
+  - ' '
+  - The Winner of Team is <winnerTeam> !!
+  - Congratulations for winning!
+  - ' '
+  - 'List of the Winner Team:'
+  - <ListTeamMember>
+  - ' '
+  - The Hoster is <hoster>
+  - Remember to thanks the hoster!
+  - ' '
+  - '----------------------------------------'
+  - ' '
+  - 'Server IP: Mitw.Rip'
+  - ' '
+
+TeamColor:
+  TeammateColor: '&a'
+  EnemyColor: '&c'
+  StaffColor: '&e'
+
+combatLogger:
+  Enabled: true
+  EntityName: '&c<player>'
+  timer: 25
+  block-cmds:
+  - bp
+  - backpack
+  - extrainventory
+  - extrainv
+  - fly
+  - god
+  - gamemode
+  - game
+  - vanish
+  - v
+  - tp
+  - tpa
+  - tphere
+
+freezer:
+  autoban-on-disconnect: false
+  blacklist-cmds:
+  - backpack
+  - bp
+  - extrainv
+  - extrainventory
+  BanCmd: 'ban <player> 12d &cHacking &7[&aAdmitted&7]'
+
+blocked-cmds:
+- me
+- bukkit:me
+- plugin
+
+WorldGenerator:
+  Good-Seeds:
+  - #exist nms supported sounds:
+    #- NOTE_PLING
+    #- NOTE_BASS
+    #- CHICKEN_EGG_POP
+    #- BURP
+    #- ORB_PICKUP
+    #- SPLASH2
+    #- LEVEL_UP
+    #- WITHER_DEATH
+    #- ANVIL_USE
+    #- CAT_MEOW
+    #- DRINK
+    #- EAT
+    #- NOTE_STICKS
+    #- ZOMBIE_WOODBREAK
+    #- WITHER_SPAWN
+    #- FIREWORK_LARGE_BLAST
+    #- ENDERMAN_TELEPORT
+    #- CLICK
+    #- WITCHER_DEATH
+    #- ENDERDRAGON_GROWL
+    #if you sound you want doesnt not exist in list
+    #please search nms sound type on google
+    #disable sound with false value!
+  #ex. "join: false"
+sounds:
+  disable-sounds-in-lobby: false
+  join: ORB_PICKUP
+  practice: CHICKEN_EGG_POP
+  countdown: NOTE_STICKS
+  scatter: NOTE_PLING
+  gamestart: ENDERDRAGON_GROWL
+  firstheal: LEVEL_UP
+  finalheal: LEVEL_UP
+  pvpenabled: ZOMBIE_WOODBREAK
+  border-countdown: NOTE_STICKS
+  border-shrinked: false
+  deathmatch: ENDERDRAGON_GROWL
+  game-end: WITCHER_DEATH
+  mlg-accept: NOTE_PLING
+
+LanguageGUI:
+  Inventory-name: '&6&lChoose &f&la language!'
+  Icon-material: BOOK
+  Icon-lores:
+  - '&7click me to choose <language>&7 !'
+
+Chat:
+  Enabled: true
+  Format:
+    Host: '&8[&cHOST&8]&c<prefix><player>&f: '
+    Mod: '&8[&eMOD&8]&e<prefix><player>&f: '
+    Spec: '&8[&3SPEC&8]&7<player>&f: '
+    Solo: '&7<player>&f: '
+    Team: '&8[&b<teamName>&8]&7<player>&f: '
+    TeamChat: '&5[&dTeamChat&5]&d<player>&a&l: '
+
+scenarios:
+  GoldenHead:
+    display-name: '&6Golden Head'
+    lore:
+    - '&7this is golden head'
+  config:
+    NoCleanTimer: 15
+    Timebomb-Timer: 30
