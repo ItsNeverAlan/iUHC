@@ -21,6 +21,11 @@ public class iUHCEngine extends JavaPlugin implements Runnable {
 		PlayerProfile profile;
 		for (final Player player : this.getServer().getOnlinePlayers()) {
 			profile = iUHC.getInstance().getProfileManager().getProfile(player.getUniqueId());
+
+			if (profile == null) {
+				continue;
+			}
+
 			if (profile.isPlayerAlive()) {
 				playing++;
 				continue;

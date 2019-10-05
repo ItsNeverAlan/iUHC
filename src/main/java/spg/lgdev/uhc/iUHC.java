@@ -44,6 +44,7 @@ import spg.lgdev.uhc.handler.game.UHCGame;
 import spg.lgdev.uhc.handler.impl.CombatTimer;
 import spg.lgdev.uhc.handler.impl.DisconnectTimer;
 import spg.lgdev.uhc.handler.impl.NocleanTimer;
+import spg.lgdev.uhc.handler.movement.UHCMovementHandler;
 import spg.lgdev.uhc.listener.BlockListener;
 import spg.lgdev.uhc.listener.ChatListener;
 import spg.lgdev.uhc.listener.DamageListener;
@@ -63,8 +64,7 @@ import spg.lgdev.uhc.manager.InventoryManager;
 import spg.lgdev.uhc.manager.ItemManager;
 import spg.lgdev.uhc.manager.ProfileManager;
 import spg.lgdev.uhc.nms.NMSHandler;
-import spg.lgdev.uhc.nms.packetlistener.SignGUIPacketListener;
-import spg.lgdev.uhc.nms.packetlistener.SoundPacketListener;
+import spg.lgdev.uhc.nms.packetlistener.UHCPacketListener;
 import spg.lgdev.uhc.player.database.UHCMySQL;
 import spg.lgdev.uhc.task.InviteCleanupTask;
 import spg.lgdev.uhc.util.StringUtil;
@@ -77,7 +77,6 @@ import spg.lgdev.uhc.visualise.VisualiseHandler;
 import spg.lgdev.uhc.world.Biomes;
 import spg.lgdev.uhc.world.UHCWorldCreator;
 import spg.lgdev.uhc.world.generator.GeneratorCommand;
-import net.development.mitw.packetlistener.PacketHandler;
 import net.development.mitw.utils.FastRandom;
 
 /**
@@ -184,8 +183,8 @@ public class iUHC extends iUHCEngine {
 		new InviteCleanupTask(this);
 		this.getServer().getScheduler().runTaskTimerAsynchronously(this, this, 20L, 20L);
 
-		PacketHandler.getInstance().register(new SignGUIPacketListener());
-		PacketHandler.getInstance().register(new SoundPacketListener());
+		UHCPacketListener.register();
+		UHCMovementHandler.register();
 
 		ScenariosHandler.setupGoldenHeads();
 

@@ -111,10 +111,10 @@
 
 	<dependencies>
 		<dependency>
-            <groupId>leegod.ispigot</groupId>
-            <artifactId>ispigot</artifactId>
-            <version>0.1</version>
-            <scope>provided</scope>
+			<groupId>spg.lgdev</groupId>
+			<artifactId>ispigot</artifactId>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

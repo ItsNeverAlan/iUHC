@@ -67,12 +67,4 @@ public final class Library {
 		return api.getPlugin();
 	}
 
-	public static boolean isUsingySpigot() {
-		return api.isUsingySpigot();
-	}
-
-	public static boolean isUsingnSpigot() {
-		return api.isUsingnSpigot();
-	}
-
 }

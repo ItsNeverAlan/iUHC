@@ -22,10 +22,6 @@ public class GameTask extends Task {
 				- game.getFinalHealTime();
 
 		game.borderCountdowns = game.getFirstBorder() - game.getPvpTime();
-
-		if (NMSHandler.getInstance().getYSpigot().isUsing())
-			return;
-
 	}
 
 	@Override

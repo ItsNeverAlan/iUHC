@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerJoinedEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import spg.lgdev.uhc.board.Board;
@@ -140,104 +139,101 @@ public class JoinListener implements org.bukkit.event.Listener {
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		event.setJoinMessage(null);
-	}
 
-	@EventHandler
-	public void onPlayerJoined(final PlayerJoinedEvent e) {
+		plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+			final Player p = event.getPlayer();
+			final PlayerProfile profile = pm.getDebuggedProfile(p);
 
-		final Player p = e.getPlayer();
-		final PlayerProfile profile = pm.getDebuggedProfile(p);
+			profile.setName(p.getName());
+			profile.setOnline(true);
 
-		profile.setName(p.getName());
-		profile.setOnline(true);
+			pm.joinSet(p);
+			plugin.getSidebarManager().getPlayerBoards().put(p.getUniqueId(), new Board(plugin, p, plugin.getSidebarManager().getAdapter()));
 
-		pm.joinSet(p);
-		plugin.getSidebarManager().getPlayerBoards().put(p.getUniqueId(), new Board(plugin, p, plugin.getSidebarManager().getAdapter()));
+			p.setWalkSpeed(0.2f);
 
-		p.setWalkSpeed(0.2f);
+			if (GameStatus.notStarted()) {
 
-		if (GameStatus.notStarted()) {
-
-			game.lobby(e.getPlayer(), true);
-			profile.setPlayerAlive(true);
-			for (final String msg : Lang.getInstance().getMessageList(p, "join-messages")) {
-				p.sendMessage(StringUtil.replace(msg, new StringUtil.ReplaceValue("<online>", "" + plugin.getPlaying()),
-						new StringUtil.ReplaceValue("<max>", game.getMaxplayers() + ""),
-						new StringUtil.ReplaceValue("<type>", game.getGameType()),
-						new StringUtil.ReplaceValue("<scenarios>", Scenarios.getScenariosString())));
-			}
-
-		} else {
-
-			if (plugin.getDisconnectTimer().isCooldown(p.getUniqueId())) {
-				plugin.getDisconnectTimer().clearCooldown(p.getUniqueId());
-			}
-
-			if (!GameStatus.is(GameStatus.FINISH)) {
-
-				if (TeamManager.getInstance().isTeamsEnabled() && profile.getTeam() == null) {
-					TeamManager.getInstance().createTeam(p);
+				game.lobby(event.getPlayer(), true);
+				profile.setPlayerAlive(true);
+				for (final String msg : Lang.getInstance().getMessageList(p, "join-messages")) {
+					p.sendMessage(StringUtil.replace(msg, new StringUtil.ReplaceValue("<online>", "" + plugin.getPlaying()),
+							new StringUtil.ReplaceValue("<max>", game.getMaxplayers() + ""),
+							new StringUtil.ReplaceValue("<type>", game.getGameType()),
+							new StringUtil.ReplaceValue("<scenarios>", Scenarios.getScenariosString())));
 				}
 
-				if (game.getWhitelist().contains(p.getUniqueId()) && !game.isMod(p.getUniqueId())) {
+			} else {
 
-					if (game.getOfflineRespawns().contains(FastUUID.toString(p.getUniqueId()))) {
-						pm.setRespawn(e.getPlayer(), null);
-						game.getOfflineRespawns().remove(FastUUID.toString(p.getUniqueId()));
+				if (plugin.getDisconnectTimer().isCooldown(p.getUniqueId())) {
+					plugin.getDisconnectTimer().clearCooldown(p.getUniqueId());
+				}
+
+				if (!GameStatus.is(GameStatus.FINISH)) {
+
+					if (TeamManager.getInstance().isTeamsEnabled() && profile.getTeam() == null) {
+						TeamManager.getInstance().createTeam(p);
 					}
 
-					profile.setPlayerAlive(true);
+					if (game.getWhitelist().contains(p.getUniqueId()) && !game.isMod(p.getUniqueId())) {
 
-					if (profile.isLoggerDied()) {
+						if (game.getOfflineRespawns().contains(FastUUID.toString(p.getUniqueId()))) {
+							pm.setRespawn(event.getPlayer(), null);
+							game.getOfflineRespawns().remove(FastUUID.toString(p.getUniqueId()));
+						}
 
-						pm.setSpectator(p, false);
-						profile.setLoggerDied(false);
-						game.getWhitelist().remove(p.getUniqueId());
+						profile.setPlayerAlive(true);
+
+						if (profile.isLoggerDied()) {
+
+							pm.setSpectator(p, false);
+							profile.setLoggerDied(false);
+							game.getWhitelist().remove(p.getUniqueId());
+
+						} else {
+
+							if (profile.getData() != null) {
+								profile.getData().restore(event.getPlayer(), !Loggers.getInstance().removeEntity(event.getPlayer()));
+							} else {
+								System.out.println("playerdata for " + p.getName() + " doesn't exists");
+							}
+
+							if (profile.getStatus() == PlayerStatus.SCATTERING || profile.getStatus() == PlayerStatus.LOBBY) {
+								game.ScatterInGame(event.getPlayer(), true);
+							}
+
+						}
 
 					} else {
 
-						if (profile.getData() != null) {
-							profile.getData().restore(e.getPlayer(), !Loggers.getInstance().removeEntity(e.getPlayer()));
-						} else {
-							System.out.println("playerdata for " + p.getName() + " doesn't exists");
+						if (!game.isMod(p.getUniqueId())) {
+							pm.setSpectator(p, false);
 						}
 
-						if (profile.getStatus() == PlayerStatus.SCATTERING || profile.getStatus() == PlayerStatus.LOBBY) {
-							game.ScatterInGame(e.getPlayer(), true);
+						if (game.getOfflineKicks().contains(p.getName())) {
+							p.sendMessage(Lang.getMsg(p, "LeaveTooLong"));
 						}
 
+						p.teleport(new Location(Bukkit.getWorld("UHCArena"), 0, 100, 0));
+					}
+
+					if (CachedConfig.BoardEnabled) {
+						NameTagUtil.updateTags(p);
+						NameTagUtil.updateAllTags(p);
 					}
 
 				} else {
 
 					if (!game.isMod(p.getUniqueId())) {
-						pm.setSpectator(p, false);
+						p.teleport(new Location(Bukkit.getWorld("UHCArena"), 0, 100, 0));
 					}
 
-					if (game.getOfflineKicks().contains(p.getName())) {
-						p.sendMessage(Lang.getMsg(p, "LeaveTooLong"));
-					}
-
-					p.teleport(new Location(Bukkit.getWorld("UHCArena"), 0, 100, 0));
-				}
-
-				if (CachedConfig.BoardEnabled) {
-					NameTagUtil.updateTags(p);
-					NameTagUtil.updateAllTags(p);
-				}
-
-			} else {
-
-				if (!game.isMod(p.getUniqueId())) {
-					p.teleport(new Location(Bukkit.getWorld("UHCArena"), 0, 100, 0));
 				}
 
 			}
 
-		}
-
-		this.hideSpectators(e.getPlayer(), profile.isPlayerAlive());
-
+			this.hideSpectators(event.getPlayer(), profile.isPlayerAlive());
+		}, 1L);
 	}
 
 }

@@ -68,10 +68,6 @@ public class UltimateUHCApi {
 		return iUHC.getInstance();
 	}
 
-	public boolean isUsingnSpigot() {
-		return NMSHandler.getInstance().getNSpigot().isUsing();
-	}
-
 	public boolean isScattering() {
 		return GameStatus.is(GameStatus.TELEPORT);
 	}

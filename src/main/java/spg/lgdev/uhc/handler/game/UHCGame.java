@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import spg.lgdev.uhc.iUHC;
+import spg.lgdev.uhc.nms.packetlistener.UHCPacketListener;
 import spg.lgdev.uhc.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -49,7 +50,6 @@ import spg.lgdev.uhc.manager.ArenaManager;
 import spg.lgdev.uhc.manager.InventoryManager;
 import spg.lgdev.uhc.manager.TeamManager;
 import spg.lgdev.uhc.nms.NMSHandler;
-import spg.lgdev.uhc.nms.packetlistener.SoundPacketListener;
 import spg.lgdev.uhc.player.DataManager;
 import spg.lgdev.uhc.player.PlayerProfile;
 import spg.lgdev.uhc.player.TeamProfile;
@@ -63,9 +63,7 @@ import spg.lgdev.uhc.task.LobbyTask;
 import spg.lgdev.uhc.task.ReleaseTask;
 import spg.lgdev.uhc.task.TimebombTask;
 import net.development.mitw.Mitw;
-import net.development.mitw.packetlistener.PacketHandler;
 import net.development.mitw.uuid.UUIDCache;
-import spg.lgdev.uhc.util.*;
 
 @Getter
 @Setter
@@ -430,7 +428,7 @@ public class UHCGame {
 
 		GameStatus.set(GameStatus.TELEPORT);
 
-		PacketHandler.getInstance().unregister(SoundPacketListener.class);
+		UHCPacketListener.unregisterSoundPacket();
 
 		Bukkit.getPluginManager().callEvent(new GameScatteringEvent());
 

@@ -63,7 +63,6 @@ public class ProfileManager {
 		core.setHideSpectators(false);
 
 		game.clear(player, GameMode.SURVIVAL);
-		((CraftPlayer)player).setAbleToPickupExp(false);
 
 		final Runnable runnable = () -> {
 
@@ -148,7 +147,6 @@ public class ProfileManager {
 		profile.setStatus(PlayerStatus.PLAYING);
 
 		UHCGame.getInstance().clear(player, GameMode.SURVIVAL);
-		((CraftPlayer)player).setAbleToPickupExp(true);
 
 		player.getActivePotionEffects().stream().forEach(potionEffect -> {
 
@@ -223,7 +221,6 @@ public class ProfileManager {
 		}
 
 		UHCGame.getInstance().clear(player, GameMode.SURVIVAL);
-		((CraftPlayer)player).setAbleToPickupExp(true);
 
 		player.getActivePotionEffects().stream().forEach(potionEffect -> {
 
@@ -290,7 +287,6 @@ public class ProfileManager {
 		core.setHideSpectators(false);
 
 		game.clear(player, GameMode.CREATIVE);
-		((CraftPlayer)player).setAbleToPickupExp(false);
 
 		player.setAllowFlight(true);
 		player.setFlying(true);

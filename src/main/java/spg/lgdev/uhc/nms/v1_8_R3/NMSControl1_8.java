@@ -181,7 +181,7 @@ public class NMSControl1_8 implements NMSControl {
 	@Override
 	public void changeMenuTitle(final Player player, String title) {
 
-		final int protocol = ((CraftPlayer)player).getHandle().playerConnection.networkManager.getProtocolVersion().getProtocol();
+		final int protocol = ((CraftPlayer)player).getHandle().playerConnection.networkManager.getVersion();
 
 		if (protocol < 8)
 			return;
