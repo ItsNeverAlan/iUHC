@@ -12,7 +12,7 @@ public class UHCMovementHandler {
                 .type(MovementType.XYZ)
                 .listenType(ListenType.EVERY_BLOCK_WITHOUT_Y)
                 .callback(movementValues -> {
-                    BorderRadius.checkPlayer(movementValues.getPlayer(), null, false);
+                    BorderRadius.checkPlayer(movementValues.getPlayer(), movementValues.getPlayer().getLocation(), false);
                 }).start();
     }
 }

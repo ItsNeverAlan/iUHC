@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.event.world.WorldInitEvent;
@@ -14,11 +15,6 @@ import com.google.common.base.Throwables;
 import spg.lgdev.uhc.iUHC;
 import spg.lgdev.uhc.config.CachedConfig;
 import spg.lgdev.uhc.nms.common.BiomeReplacer;
-import net.minecraft.server.v1_8_R3.BiomeBase;
-import net.minecraft.server.v1_8_R3.GenLayer;
-import net.minecraft.server.v1_8_R3.GenLayerRegionHills;
-import net.minecraft.server.v1_8_R3.IntCache;
-import net.minecraft.server.v1_8_R3.WorldChunkManager;
 
 public class BiomeReplacer1_8 implements BiomeReplacer {
 
@@ -102,6 +98,9 @@ public class BiomeReplacer1_8 implements BiomeReplacer {
         BiomeSpawnLayer(GenLayer base) {
             super(0L);
             this.a = base;
+            if (base instanceof GenLayerRiver) {
+                ((GenLayerRiver) base).generateRiver = false;
+            }
         }
         @Override
         public int[] a(int areaX, int areaY, int areaWidth, int areaHeight) {
@@ -125,8 +124,6 @@ public class BiomeReplacer1_8 implements BiomeReplacer {
                     outBiomeIds[i + j * areaWidth] = biomeId;
                 }
             }
-            outBiomeIds[BiomeBase.RIVER.id] = biomeId;
-            outBiomeIds[BiomeBase.FROZEN_RIVER.id] = biomeId;
             return outBiomeIds;
         }
     }

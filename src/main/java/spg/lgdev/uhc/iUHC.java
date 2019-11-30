@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import spg.lgdev.uhc.board.Frame;
 import spg.lgdev.uhc.command.permission.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,7 +16,6 @@ import org.bukkit.plugin.PluginManager;
 import lombok.Getter;
 import lombok.Setter;
 import spg.lgdev.uhc.announce.AnnounceManager;
-import spg.lgdev.uhc.board.BoardManager;
 import spg.lgdev.uhc.board.impl.UHCAdapter;
 import spg.lgdev.uhc.board.placeholders.ScoreboardPlaceholders;
 import spg.lgdev.uhc.border.BorderStyle;
@@ -109,8 +109,6 @@ public class iUHC extends iUHCEngine {
 	@Getter
 	private FileManager fileManager;
 	@Getter
-	private BoardManager sidebarManager;
-	@Getter
 	private ChunkManager chunkManager;
 	@Getter
 	private ItemManager itemManager;
@@ -125,6 +123,8 @@ public class iUHC extends iUHCEngine {
 	private AnnounceManager announceManager;
 	@Getter
 	private CommandManager commandManager;
+	@Getter
+	private ScoreboardPlaceholders placeholders;
 
 	//-- Timers
 	@Getter
@@ -160,8 +160,9 @@ public class iUHC extends iUHCEngine {
 		this.announceManager = new AnnounceManager(this);
 		this.commandManager = new CommandManager();
 		this.commandManager.registerSimpleCommands(this);
+		this.placeholders = new ScoreboardPlaceholders(this);
 
-		this.setBoardManager(new BoardManager(this, new UHCAdapter(this), new ScoreboardPlaceholders(this)));
+		new Frame(this, new UHCAdapter(this));
 
 		if (CachedConfig.SQL) {
 			UHCMySQL.getInstance().openConnection();
@@ -371,11 +372,6 @@ public class iUHC extends iUHCEngine {
 
 	public void log(final boolean isPrefix, final String message) {
 		Bukkit.getConsoleSender().sendMessage((isPrefix ? "§f[§6UHC§f] §6" : "") + StringUtil.cc(message));
-	}
-
-	public void setBoardManager(final BoardManager manager) {
-		this.sidebarManager = manager;
-		this.sidebarManager.runTaskTimerAsynchronously(this, manager.getAdapter().getInterval(), manager.getAdapter().getInterval());
 	}
 
 }

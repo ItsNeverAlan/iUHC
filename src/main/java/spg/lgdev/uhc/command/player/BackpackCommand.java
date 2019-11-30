@@ -43,7 +43,6 @@ public class BackpackCommand extends PlayerCommand {
 		if (team != null) {
 
 			player.openInventory(team.getBackPack());
-			NMSHandler.getInstance().getNMSControl().changeMenuTitle(player, StringUtil.replace(Lang.getMsg(player, "backpack-title"), "<teamName>", team.getTeamName()));
 
 		}
 	}

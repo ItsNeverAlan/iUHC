@@ -93,7 +93,6 @@ public class ProfileManager {
 			}
 
 			player.setHealth(20.0D);
-			((CraftPlayer) player).getHandle().getDataWatcher().watch(6, 20.0F);
 			player.setAllowFlight(true);
 			player.setFlying(true);
 		};

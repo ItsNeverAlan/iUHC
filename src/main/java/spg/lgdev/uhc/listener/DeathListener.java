@@ -30,6 +30,7 @@ import spg.lgdev.uhc.handler.Lang;
 import spg.lgdev.uhc.handler.game.UHCGame;
 import spg.lgdev.uhc.manager.PracticeManager;
 import spg.lgdev.uhc.manager.TeamManager;
+import spg.lgdev.uhc.nms.NMSHandler;
 import spg.lgdev.uhc.player.PlayerProfile;
 import spg.lgdev.uhc.player.TeamProfile;
 import spg.lgdev.uhc.player.rating.RatingChangeReason;
@@ -51,142 +52,138 @@ public class DeathListener implements org.bukkit.event.Listener {
 		this.game = UHCGame.getInstance();
 	}
 
-	public String Colored(final String s) {
-		return StringUtil.cc(s);
-	}
-
 	@EventHandler
-	public void onPlayerDeath(final PlayerDeathEvent e) {
+	public void onPlayerDeath(final PlayerDeathEvent event) {
 
-		final Player p = e.getEntity().getPlayer();
-		final Player k = e.getEntity().getKiller();
+		final Player player = event.getEntity().getPlayer();
+		final Player killer = event.getEntity().getKiller();
 
-		e.setDeathMessage(null);
+		event.setDeathMessage(null);
 
 		if (GameStatus.notStarted()) {
-			practiceDeath(e, p, k);
+			practiceDeath(event, player, killer);
 			return;
 		}
 
-		final DamageCause d = e.getEntity().getLastDamageCause() != null ? e.getEntity().getLastDamageCause().getCause() : null;
-		final PlayerProfile profile = iUHC.getInstance().getProfileManager().getProfile(p.getUniqueId());
+		final DamageCause damageCause = event.getEntity().getLastDamageCause() != null ? event.getEntity().getLastDamageCause().getCause() : null;
+		final PlayerProfile profile = iUHC.getInstance().getProfileManager().getProfile(player.getUniqueId());
 
 		if (!profile.isPlayerAlive())
 			return;
 
-		final UHCPlayerDeathEvent event = new UHCPlayerDeathEvent(p);
-		Bukkit.getPluginManager().callEvent(event);
+		final UHCPlayerDeathEvent uhcEvent = new UHCPlayerDeathEvent(player);
+		Bukkit.getPluginManager().callEvent(uhcEvent);
 
-		if (event.isCancelled()) {
-			if (!p.isOnline()) {
-				game.getOfflineRespawns().add(FastUUID.toString(p.getUniqueId()));
+		if (uhcEvent.isCancelled()) {
+			if (!player.isOnline()) {
+				game.getOfflineRespawns().add(FastUUID.toString(player.getUniqueId()));
 			}
 			return;
 		}
 
-		game.getWhitelist().remove(p.getUniqueId());
-		game.removeCombatTag(p);
-		saveDeadData(p, profile);
+		game.getWhitelist().remove(player.getUniqueId());
+		game.removeCombatTag(player);
+		saveDeadData(player, profile);
 
-		Utils.playDeathAnimation(p);
+		NMSHandler.getInstance().getNMSControl().showDyingNPC(player);
 
-		if (k != null) {
+		if (killer != null) {
 
-			final PlayerProfile uHCKiller = iUHC.getInstance().getProfileManager().getProfile(k.getUniqueId());
+			final PlayerProfile killerProfile = iUHC.getInstance().getProfileManager().getProfile(killer.getUniqueId());
 
 			if (!GameStatus.is(GameStatus.FINISH)) {
-				uHCKiller.addKills();
-				uHCKiller.addTotalKills();
-				if (uHCKiller.getKills() > uHCKiller.getHighestKillStreak()) {
-					uHCKiller.setHighestKillStreak(uHCKiller.getKills());
+				killerProfile.addKills();
+				killerProfile.addTotalKills();
+				if (killerProfile.getKills() > killerProfile.getHighestKillStreak()) {
+					killerProfile.setHighestKillStreak(killerProfile.getKills());
 				}
-				uHCKiller.addKilled(p);
+				killerProfile.addKilled(player);
 				final int ratingChanged = iUHC.getRandom().nextInt(10, 15);
-				uHCKiller.setElo(uHCKiller.getElo() + ratingChanged);
-				uHCKiller.addRatingHistory(new RatingHistory(uHCKiller.getUUID(), ratingChanged, RatingChangeReason.KILL));
-				k.sendMessage(Lang.getMsg(k, "eloChanged-Kill").replaceAll("<elo>", uHCKiller.getElo() + "").replaceAll("<eloChanged>", ratingChanged + ""));
+				killerProfile.setElo(killerProfile.getElo() + ratingChanged);
+				killerProfile.addRatingHistory(new RatingHistory(killerProfile.getUUID(), ratingChanged, RatingChangeReason.KILL));
+				killer.sendMessage(Lang.getMsg(killer, "eloChanged-Kill").replaceAll("<elo>", killerProfile.getElo() + "").replaceAll("<eloChanged>", ratingChanged + ""));
 			}
 
-			k.setLevel(k.getLevel() + (iUHC.getRandom().nextInt(4) + 1));
+			killer.setLevel(killer.getLevel() + (iUHC.getRandom().nextInt(4) + 1));
 
 			if (TeamManager.getInstance().isTeamsEnabled()) {
-				final TeamProfile team = uHCKiller.getTeam();
+				final TeamProfile team = killerProfile.getTeam();
 				team.addKill();
 			}
 
 			if (Scenarios.NoClean.isOn()) {
-				uHCKiller.enableNoClean();
+				killerProfile.enableNoClean();
 			}
 
-			if (d != null && d.equals(DamageCause.PROJECTILE)) {
+			if (damageCause != null && damageCause.equals(DamageCause.PROJECTILE)) {
 
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.SHOT")
-							.replaceAll("<Player>", p.getName())
+							.replaceAll("<Player>", player.getName())
 							.replaceAll("<PlayerKills>", "" + profile.getKills())
-							.replaceAll("<Killer>", k.getName())
-							.replaceAll("<KillerKills>", uHCKiller.getKills() + ""));
+							.replaceAll("<Killer>", killer.getName())
+							.replaceAll("<KillerKills>", killerProfile.getKills() + ""));
 				}
 
 			} else {
 
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.KILLED")
-							.replaceAll("<Player>", p.getName())
+							.replaceAll("<Player>", player.getName())
 							.replaceAll("<PlayerKills>", "" + profile.getKills())
-							.replaceAll("<Killer>", k.getName())
-							.replaceAll("<KillerKills>", uHCKiller.getKills() + ""));
+							.replaceAll("<Killer>", killer.getName())
+							.replaceAll("<KillerKills>", killerProfile.getKills() + ""));
 				}
 
 			}
 
-		} else if (p.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+		} else if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
-			final EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) p.getLastDamageCause();
+			final EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) player.getLastDamageCause();
 			final Entity kk = ev.getDamager();
 			if (kk.getType().equals(EntityType.ZOMBIE)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.ZOMBIE")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			} else if (kk.getType().equals(EntityType.SKELETON)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.SKELETON")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			} else if (kk.getType().equals(EntityType.CREEPER)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.CREEPER")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			} else if (kk.getType().equals(EntityType.SPIDER)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.SPIDER")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			}
 
 		} else {
 
-			if (d != null && d.equals(DamageCause.FALL)) {
+			if (damageCause != null && damageCause.equals(DamageCause.FALL)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.FALL")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
-			} else if (d != null && d.equals(DamageCause.LAVA)) {
+			} else if (damageCause != null && damageCause.equals(DamageCause.LAVA)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.LAVA")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
-			} else if (d != null && d.equals(DamageCause.BLOCK_EXPLOSION)) {
+			} else if (damageCause != null && damageCause.equals(DamageCause.BLOCK_EXPLOSION)) {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.EXPLOSION")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			} else {
 				for (final Player pl : iUHC.getInstance().getServer().getOnlinePlayers()) {
 					pl.sendMessage(Lang.getMsg(pl, "DeathMessages.UNKOWN")
-							.replaceAll("<Player>", p.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
+							.replaceAll("<Player>", player.getName()).replaceAll("<PlayerKills>", "" + profile.getKills()));
 				}
 			}
 
@@ -196,128 +193,128 @@ public class DeathListener implements org.bukkit.event.Listener {
 
 			game.checkWin();
 			profile.addTotalDeaths();
-			executeDeathEvent(p, e);
+			executeDeathEvent(player, event);
 			if (profile.getElo() > CachedConfig.ELOCostRating) {
 				final int ratingChanged = iUHC.getRandom().nextInt(-8, -20);
 				profile.setElo(profile.getElo() + ratingChanged);
 				profile.addRatingHistory(new RatingHistory(profile.getUUID(), ratingChanged, RatingChangeReason.DEATH));
-				p.sendMessage(Lang.getMsg(p, "eloChanged-Death").replaceAll("<elo>", profile.getElo() + "").replaceAll("<eloChanged>", ratingChanged + ""));
+				player.sendMessage(Lang.getMsg(player, "eloChanged-Death").replaceAll("<elo>", profile.getElo() + "").replaceAll("<eloChanged>", ratingChanged + ""));
 			}
 
 		}
 	}
 
-	public void practiceDeath(final PlayerDeathEvent e, final Player p, final Player k) {
-		e.getDrops().clear();
-		if (UHCGame.getInstance().getPracticePlayers().contains(p.getUniqueId())) {
-			p.setHealth(20.0);
-			p.setAllowFlight(true);
-			p.setFlying(true);
-			p.teleport(new Location(Bukkit.getWorld("UHCArena_practice"), 0, 120, 0));
-			PracticeManager.respawn(p);
-			if (k == null)
+	public void practiceDeath(final PlayerDeathEvent event, final Player player, final Player killer) {
+		event.getDrops().clear();
+		if (UHCGame.getInstance().getPracticePlayers().contains(player.getUniqueId())) {
+			player.setHealth(20.0);
+			player.setAllowFlight(true);
+			player.setFlying(true);
+			player.teleport(new Location(Bukkit.getWorld("UHCArena_practice"), 0, 120, 0));
+			PracticeManager.respawn(player);
+			if (killer == null)
 				return;
-			Utils.pickupItem(k, new ItemStack(Material.GOLDEN_APPLE, 1));
-			k.setHealth(20.0);
+			Utils.pickupItem(killer, new ItemStack(Material.GOLDEN_APPLE, 1));
+			killer.setHealth(20.0);
 
 			UHCGame.getInstance().getPracticePlayers().stream()
-			.map(u -> Bukkit.getPlayer(u))
+			.map(Bukkit::getPlayer)
 			.filter(Objects::nonNull)
-			.forEach(b -> b.sendMessage(Lang.getMsg(b, "Practice.KilledMessage")
-					.replaceAll("<player>", p.getName())
-					.replaceAll("<killer>", k.getName())));
+			.forEach(other -> other.sendMessage(Lang.getMsg(other, "Practice.KilledMessage")
+					.replaceAll("<player>", player.getName())
+					.replaceAll("<killer>", killer.getName())));
 		}
 	}
 
-	public void saveDeadData(final Player p, final PlayerProfile profile) {
+	public void saveDeadData(final Player player, final PlayerProfile profile) {
 
-		game.getWhitelist().remove(p.getUniqueId());
+		game.getWhitelist().remove(player.getUniqueId());
 
-		profile.saveData(p);
+		profile.saveData(player);
 		profile.getData().setHealth(20.0D);
 
-		iUHC.getInstance().getProfileManager().setSpectator(p, true);
+		iUHC.getInstance().getProfileManager().setSpectator(player, false);
 		profile.startActionCountdown();
 
 	}
 
-	public void placeHead(final Player p) {
+	public void placeHead(final Player player) {
 
-		final Block blockOne = p.getLocation().getBlock();
-		blockOne.setType(Material.NETHER_FENCE);
+		final Block blockFence = player.getLocation().getBlock();
+		blockFence.setType(Material.NETHER_FENCE);
 
-		final Block block = blockOne.getRelative(BlockFace.UP);
-		block.setType(Material.SKULL);
+		final Block blockSkull = blockFence.getRelative(BlockFace.UP);
+		blockSkull.setType(Material.SKULL);
 
-		final Skull skull = (Skull) block.getState();
-		skull.setOwner(p.getName());
+		final Skull skull = (Skull) blockSkull.getState();
+		skull.setOwner(player.getName());
 		skull.update();
 
-		block.setData((byte) 1);
+		blockSkull.setData((byte) 1);
 	}
 
-	public void executeDeathEvent(final Player p, final PlayerDeathEvent e) {
+	public void executeDeathEvent(final Player player, final PlayerDeathEvent event) {
 
 		if (Scenarios.TimeBomb.isOn()) {
 
-			final Timebomb timebomb = new Timebomb(p.getName(), p.getLocation());
-			timebomb.prepare(e);
+			final Timebomb timebomb = new Timebomb(player.getName(), player.getLocation());
+			timebomb.prepare(event);
 			UHCGame.getInstance().getTimebombTask().add(timebomb);
 
 		} else {
 
 			if (Scenarios.LuckyKill.isOn()) {
-				p.getWorld().dropItemNaturally(p.getLocation(), new ItemStack(Material.GOLDEN_APPLE, 1));
+				player.getWorld().dropItemNaturally(player.getLocation(), new ItemStack(Material.GOLDEN_APPLE, 1));
 			}
 
 			if (Scenarios.Barebones.isOn()) {
 
 				if (Scenarios.CutClean.isOn()) {
-					p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DIAMOND, 1));
+					player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.DIAMOND, 1));
 				} else if (Scenarios.DoubleOres.isOn()) {
-					p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DIAMOND, 2));
+					player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.DIAMOND, 2));
 				} else if (Scenarios.TripleOres.isOn()) {
-					p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DIAMOND, 3));
+					player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.DIAMOND, 3));
 				} else {
-					p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DIAMOND, 1));
+					player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.DIAMOND, 1));
 				}
 
-				p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.GOLDEN_APPLE, 2));
-				p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.ARROW, 32));
-				p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.STRING, 2));
+				player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.GOLDEN_APPLE, 2));
+				player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.ARROW, 32));
+				player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.STRING, 2));
 
 			}
 
 			if (Scenarios.DiamondLess.isOn()) {
-				p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DIAMOND, 1));
+				player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.DIAMOND, 1));
 			}
 
 			if (Scenarios.GoldLess.isOn()) {
-				p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.GOLD_INGOT, 8));
-				p.getWorld().dropItem(p.getLocation(), ScenariosHandler.buildGoldenHead());
+				player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.GOLD_INGOT, 8));
+				player.getWorld().dropItem(player.getLocation(), ScenariosHandler.buildGoldenHead());
 			}
 
 			if (UHCGame.getInstance().isGoldenHead()) {
-				placeHead(p);
+				placeHead(player);
 			}
 
 		}
 
 		if (Scenarios.ExtraInventory.isOn()) {
 
-			p.getLocation().add(1.0, 1.0, 0.0).getBlock().setType(Material.CHEST);
-			final Chest chestBlock = (Chest) p.getLocation().add(1.0, 1.0, 0.0).getBlock().getState();
-			chestBlock.getInventory().setContents(p.getEnderChest().getContents());
+			player.getLocation().add(1.0, 1.0, 0.0).getBlock().setType(Material.CHEST);
+			final Chest chestBlock = (Chest) player.getLocation().add(1.0, 1.0, 0.0).getBlock().getState();
+			chestBlock.getInventory().setContents(player.getEnderChest().getContents());
 
 		}
 	}
 
 	@EventHandler
-	public void onEntityDeath(final EntityDeathEvent e) {
+	public void onEntityDeath(final EntityDeathEvent event) {
 
-		if ((e.getEntity() instanceof Villager)) {
+		if ((event.getEntity() instanceof Villager)) {
 
-			final Villager entity = (Villager) e.getEntity();
+			final Villager entity = (Villager) event.getEntity();
 			if (entity.getCustomName() == null)
 				return;
 
@@ -357,7 +354,7 @@ public class DeathListener implements org.bukkit.event.Listener {
 							.replace("<Player>", UUIDCache.getName(uuid) + "§7(CombatLogger)").replace("<PlayerKills>", "" + spkills));
 				}
 			}
-			e.getDrops().clear();
+			event.getDrops().clear();
 
 			if (content != null) {
 				Stream.of(content)
@@ -374,13 +371,13 @@ public class DeathListener implements org.bukkit.event.Listener {
 			return;
 		} else {
 			if (Scenarios.CutClean.isOn()) {
-				WorldUtil.entityDeathDrops(e, 1);
+				WorldUtil.entityDeathDrops(event, 1);
 			}
 			if (Scenarios.DoubleOres.isOn()) {
-				WorldUtil.entityDeathDrops(e, 2);
+				WorldUtil.entityDeathDrops(event, 2);
 			}
 			if (Scenarios.TripleOres.isOn()) {
-				WorldUtil.entityDeathDrops(e, 3);
+				WorldUtil.entityDeathDrops(event, 3);
 			}
 		}
 

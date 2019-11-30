@@ -43,8 +43,8 @@ public interface NMSControl {
 
 	boolean isLiquid(MaterialData materialData);
 
-	void changeMenuTitle(Player player, String title);
-
 	void placeOre(int x, int y, int z, final World world, Material material);
+
+	void showDyingNPC(Player player);
 
 }

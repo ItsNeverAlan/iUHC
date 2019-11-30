@@ -2,14 +2,19 @@ package spg.lgdev.uhc.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import spg.lgdev.uhc.iUHC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
-import spg.lgdev.uhc.board.Board;
 import spg.lgdev.uhc.config.CachedConfig;
 import spg.lgdev.uhc.handler.Library;
 import spg.lgdev.uhc.handler.game.UHCGame;
@@ -22,17 +27,66 @@ public class NameTagUtil extends ReflectionUtils {
 
 	private NameTagUtil() {}
 
+	private static final String PREFIX = "nt_team_";
+	private static final String[] COLORS = new String[]{
+			CachedConfig.TEAMMATE_TAG,
+			CachedConfig.ENEMY_TAG,
+			CachedConfig.STAFF_TAG
+	};
+
+	private static String getTeamName(String team) {
+		return PREFIX + team;
+	}
+
+	public static void setup(Player player) {
+		Scoreboard scoreboard = player.getScoreboard();
+
+		if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) {
+			scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+		}
+
+		for (String color : COLORS) {
+			String teamName = getTeamName(color);
+			Team team = scoreboard.getTeam(teamName);
+
+			if (team == null) {
+				team = scoreboard.registerNewTeam(teamName);
+			}
+
+			team.setPrefix(color);
+
+			Iterator<String> entryIterator = team.getEntries().iterator();
+
+			while (entryIterator.hasNext()) {
+				entryIterator.remove();
+			}
+		}
+
+		Objective objective = scoreboard.registerNewObjective("health", "health");
+		objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		objective.setDisplayName("§c" + StringEscapeUtils.unescapeJava("\u2764"));
+
+		objective = scoreboard.registerNewObjective("health_tab", "health");
+		objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+
+		player.setScoreboard(scoreboard);
+	}
+
 	public static void send(final List<Player> targets, final String prefix, final List<Player> players) {
 
 		for (final Player player : players) {
 
-			final Board board = iUHC.getInstance().getSidebarManager().getPlayerBoards().get(player.getUniqueId());
+			Team team = player.getScoreboard().getTeam(getTeamName(prefix));
 
-			final Team team = board.getPrefixs().get(prefix);
+			if (team == null) {
+				team = player.getScoreboard().registerNewTeam(getTeamName(prefix));
+
+				team.setPrefix(prefix);
+			}
 
 			for (final Player target : targets) {
 
-				clearFromTeams(board, target);
+				clearFromTeams(player.getScoreboard(), target);
 
 				if (!team.hasEntry(target.getName())) {
 					team.addEntry(target.getName());
@@ -42,20 +96,25 @@ public class NameTagUtil extends ReflectionUtils {
 	}
 
 	public static void clearFromTeams(final Player player, final Player target) {
-		final Board board = iUHC.getInstance().getSidebarManager().getPlayerBoards().get(target.getUniqueId());
-		clearFromTeams(board, target);
+		clearFromTeams(player.getScoreboard(), target);
 	}
 
-	public static void clearFromTeams(final Board board, final Player target) {
-		for (final Team team : board.getPrefixs().values()) {
+	public static void clearFromTeams(Scoreboard scoreboard, final Player target) {
+		for (final String prefix : COLORS) {
+			Team team = scoreboard.getTeam(prefix);
+
+			if (team == null) {
+				continue;
+			}
+
 			team.removeEntry(target.getName());
 		}
 	}
 
 	public static void clearFromEveryone(final Player player) {
 		Bukkit.getScheduler().runTaskAsynchronously(iUHC.getInstance(), () -> {
-			for (final Board board : iUHC.getInstance().getSidebarManager().getPlayerBoards().values()) {
-				clearFromTeams(board, player);
+			for (final Player player1 : Bukkit.getOnlinePlayers()) {
+				clearFromTeams(player1, player);
 			}
 		});
 	}

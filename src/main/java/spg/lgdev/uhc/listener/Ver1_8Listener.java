@@ -17,7 +17,6 @@ public class Ver1_8Listener implements Listener {
 			if (entity instanceof Rabbit || entity instanceof Guardian) {
 				entity.remove();
 			}
-
 		}
 	}
 

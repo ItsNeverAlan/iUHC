@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerInitialSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import spg.lgdev.uhc.board.Board;
 import spg.lgdev.uhc.config.CachedConfig;
 import spg.lgdev.uhc.enums.GameStatus;
 import spg.lgdev.uhc.enums.PlayerStatus;
@@ -20,6 +19,7 @@ import spg.lgdev.uhc.handler.game.Loggers;
 import spg.lgdev.uhc.handler.game.UHCGame;
 import spg.lgdev.uhc.manager.ProfileManager;
 import spg.lgdev.uhc.manager.TeamManager;
+import spg.lgdev.uhc.nms.NMSHandler;
 import spg.lgdev.uhc.player.PlayerProfile;
 import spg.lgdev.uhc.scenario.Scenarios;
 import spg.lgdev.uhc.util.FastUUID;
@@ -144,11 +144,12 @@ public class JoinListener implements org.bukkit.event.Listener {
 			final Player p = event.getPlayer();
 			final PlayerProfile profile = pm.getDebuggedProfile(p);
 
+			NMSHandler.getInstance().getNMSControl().clearScatterEffects(p);
+
 			profile.setName(p.getName());
 			profile.setOnline(true);
 
 			pm.joinSet(p);
-			plugin.getSidebarManager().getPlayerBoards().put(p.getUniqueId(), new Board(plugin, p, plugin.getSidebarManager().getAdapter()));
 
 			p.setWalkSpeed(0.2f);
 

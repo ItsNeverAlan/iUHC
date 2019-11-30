@@ -1,7 +1,11 @@
 package spg.lgdev.uhc.nms.v1_8_R3;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.scheduler.BukkitRunnable;
 import spg.lgdev.uhc.iUHC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,24 +25,6 @@ import com.google.common.base.Predicate;
 import spg.lgdev.uhc.nms.common.NMSControl;
 import spg.lgdev.uhc.util.reflection.ReflectionUtils;
 import spg.lgdev.uhc.util.signgui.SignUpdate;
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.BlockFalling;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.BlockPredicate;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.ChatMessage;
-import net.minecraft.server.v1_8_R3.Container;
-import net.minecraft.server.v1_8_R3.EntityItem;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.MobEffect;
-import net.minecraft.server.v1_8_R3.MobEffectList;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInUpdateSign;
-import net.minecraft.server.v1_8_R3.PacketPlayOutOpenSignEditor;
-import net.minecraft.server.v1_8_R3.PacketPlayOutOpenWindow;
 
 public class NMSControl1_8 implements NMSControl {
 
@@ -94,7 +80,6 @@ public class NMSControl1_8 implements NMSControl {
 			return;
 		}
 		EntityItem entityItem = entityPlayer.drop(nmsItemStack, false);
-		entityItem = entityPlayer.drop(nmsItemStack, false);
 		if (entityItem != null) {
 			entityItem.q();
 			entityItem.b(entityPlayer.getName());
@@ -178,31 +163,6 @@ public class NMSControl1_8 implements NMSControl {
 		return Block.getById(materialData.getItemTypeId() << 4 | materialData.getData()).getMaterial().isLiquid();
 	}
 
-	@Override
-	public void changeMenuTitle(final Player player, String title) {
-
-		final int protocol = ((CraftPlayer)player).getHandle().playerConnection.networkManager.getVersion();
-
-		if (protocol < 8)
-			return;
-
-		if (protocol < 9 && title.length() > 16) {
-			title = title.substring(0, 15);
-		}
-
-		final EntityPlayer entityPlayer = ((CraftPlayer)player).getHandle();
-
-		final Container container = entityPlayer.activeContainer;
-
-		if (container == null)
-			return;
-
-		final PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(container.windowId, "minecraft:chest", new ChatMessage(title, new Object[0]), player.getOpenInventory().getTopInventory().getSize());
-
-		entityPlayer.playerConnection.sendPacket(packet);
-		entityPlayer.updateInventory(container);
-	}
-
 	Predicate<IBlockData> blockPredicate = BlockPredicate.a(Blocks.STONE);
 
 	@Override
@@ -214,4 +174,37 @@ public class NMSControl1_8 implements NMSControl {
 		}
 	}
 
+	@Override
+	public void showDyingNPC(Player player) {
+		Location loc = player.getLocation();
+		final List<Player> players = new ArrayList<>();
+		for (Player other : Bukkit.getOnlinePlayers()) {
+			if (other != player && other.getWorld() == player.getWorld() && other.getLocation().distanceSquared(loc) < 32 * 32) {
+				players.add(other);
+			}
+		}
+		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+		PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn(entityPlayer);
+		int i = Entity.getEntityCount() + 1;
+		Entity.setEntityCount(i);
+		net.development.mitw.utils.reflection.ReflectionUtils.setField(packet, "a", i);
+		PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus();
+		net.development.mitw.utils.reflection.ReflectionUtils.setField(statusPacket, "a", i);
+		net.development.mitw.utils.reflection.ReflectionUtils.setField(statusPacket, "b", (byte) 3);
+		PacketPlayOutEntityDestroy destoryPacket = new PacketPlayOutEntityDestroy(i);
+
+		players.forEach(other -> {
+			((CraftPlayer) other).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer) other).getHandle().playerConnection.sendPacket(statusPacket);
+		});
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				players.forEach(other -> {
+					((CraftPlayer) other).getHandle().playerConnection.sendPacket(destoryPacket);
+				});
+			}
+		}.runTaskLater(iUHC.getInstance(), 20L);
+	}
 }

@@ -5,12 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import spg.lgdev.uhc.board.FrameAdapter;
 import spg.lgdev.uhc.iUHC;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
-import spg.lgdev.uhc.board.Board;
-import spg.lgdev.uhc.board.BoardAdapter;
 import spg.lgdev.uhc.config.CachedConfig;
 import spg.lgdev.uhc.enums.GameStatus;
 import spg.lgdev.uhc.handler.Lang;
@@ -19,7 +18,7 @@ import spg.lgdev.uhc.manager.TeamManager;
 import spg.lgdev.uhc.player.PlayerProfile;
 import spg.lgdev.uhc.scenario.Scenarios;
 
-public class UHCAdapter implements BoardAdapter {
+public class UHCAdapter implements FrameAdapter {
 
 	private final iUHC plugin;
 	private final String scenarios;
@@ -35,7 +34,7 @@ public class UHCAdapter implements BoardAdapter {
 	}
 
 	@Override
-	public List<String> getScoreboard(final Player p, final Board board) {
+	public List<String> getLines(final Player p) {
 
 		List<String> linesOld;
 		final PlayerProfile profile = plugin.getProfileManager().getProfile(p.getUniqueId());
@@ -69,12 +68,12 @@ public class UHCAdapter implements BoardAdapter {
 		final List<String> lines = new LinkedList<>();
 
 		if (UHCGame.getInstance().isMod(p.getUniqueId())) {
-			Lang.getInstance().getSidebarList(p, "Staff-formats").forEach(s -> lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders2(p, s)));
+			Lang.getInstance().getSidebarList(p, "Staff-formats").forEach(s -> lines.add(plugin.getPlaceholders().doSidebarPlaceholders2(p, s)));
 		}
 
 		for (String s : linesOld) {
 
-			s = plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders(p, s);
+			s = plugin.getPlaceholders().doSidebarPlaceholders(p, s);
 
 			if (s.contains("[display=false]") || s.contains("[display=!true]")) {
 				continue;
@@ -83,30 +82,30 @@ public class UHCAdapter implements BoardAdapter {
 			if (s.equals("<NoClean-Format>")) {
 
 				if (plugin.getProfileManager().isNoClean(p)) {
-					lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders(p, Lang.getInstance().getSidebarLine(p, "noClean-format")));
+					lines.add(plugin.getPlaceholders().doSidebarPlaceholders(p, Lang.getInstance().getSidebarLine(p, "noClean-format")));
 				}
 				continue;
 
 			} else if (s.equals("<deathmatch-Format>")) {
 
 				if (UHCGame.getInstance().isDeathmatchCountdowning()) {
-					lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders(p, Lang.getInstance().getSidebarLine(p, "deathMatch-Format")));
+					lines.add(plugin.getPlaceholders().doSidebarPlaceholders(p, Lang.getInstance().getSidebarLine(p, "deathMatch-Format")));
 				}
 				continue;
 
 			} else if (s.equals("<winners>")) {
 
 				for (final UUID u : UHCGame.getInstance().getWinners()) {
-					Lang.getInstance().getSidebarList(p, "Winner-formats").forEach(line -> lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders3(u, line)));
+					Lang.getInstance().getSidebarList(p, "Winner-formats").forEach(line -> lines.add(plugin.getPlaceholders().doSidebarPlaceholders3(u, line)));
 				}
 				continue;
 
 			} else if (s.equals("<scenarios>")) {
 
 				if (!Scenarios.getScenariosList().isEmpty()) {
-					new ArrayList<>(Scenarios.getScenariosList()).forEach(scen -> lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders(p, scenarios.replaceAll("<Scenario>", scen))));
+					new ArrayList<>(Scenarios.getScenariosList()).forEach(scen -> lines.add(plugin.getPlaceholders().doSidebarPlaceholders(p, scenarios.replaceAll("<Scenario>", scen))));
 				} else {
-					lines.add(plugin.getSidebarManager().getPlaceholders().doSidebarPlaceholders(p, scenarios.replaceAll("<Scenario>", "null")));
+					lines.add(plugin.getPlaceholders().doSidebarPlaceholders(p, scenarios.replaceAll("<Scenario>", "null")));
 				}
 				continue;
 
@@ -118,16 +117,5 @@ public class UHCAdapter implements BoardAdapter {
 
 		return lines;
 	}
-
-	@Override
-	public long getInterval() {
-		return CachedConfig.PerformanceMode ? 10L : 2L;
-	}
-
-	@Override
-	public void onScoreboardCreate(final Player player, final Scoreboard board) {}
-
-	@Override
-	public void preLoop() {}
 
 }

@@ -28,8 +28,6 @@ public class QuitListener implements org.bukkit.event.Listener {
 		final PlayerProfile profile = plugin.getProfileManager().getProfile(p.getUniqueId());
 		profile.setOnline(false);
 
-		plugin.getSidebarManager().getPlayerBoards().remove(p.getUniqueId());
-
 		if (GameStatus.notStarted()) {
 
 			profile.setPlayerAlive(false);

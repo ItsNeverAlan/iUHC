@@ -219,9 +219,4 @@ public class Utils {
 		return null;
 	}
 
-	public static void playDeathAnimation(final Player player) {
-		((CraftPlayer) player).getHandle().setFakingDeath(true);
-		((CraftPlayer) player).getHandle().getDataWatcher().watch(6, 0.0F);
-	}
-
 }
